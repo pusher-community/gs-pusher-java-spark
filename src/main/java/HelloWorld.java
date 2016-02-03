@@ -27,9 +27,20 @@ public class HelloWorld {
 
         post("/authenticate", (req, res) -> {
 
+            // in a real application you might take this user ID
+            // and check in your database to check it's valid
+            // or perform some other test to ensure you want this user subscribing
+
+            String userId = req.queryParams("userId");
+
+            // you also get passed the channel name, so you can check if a specific user
+            // is allowed to subscribe to a specific channel
             String socketId = req.queryParams("socket_id");
             String channelName = req.queryParams("channel_name");
 
+            // if the user is valid, you should return the result of pusher.authenticate
+            // if at this point we'd decided the user was invalid, we should return HTTP 403 Forbidden
+            // and Pusher won't allow this user to be subscribed
             return pusher().authenticate(socketId, channelName);
 
         });
